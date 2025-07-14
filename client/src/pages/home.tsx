@@ -174,6 +174,8 @@ const Home: React.FC = () => {
     effectiveType?: string;
     downlink?: number;
   }>({});
+  // Add state for IP address
+  const [ipAddress, setIpAddress] = useState<string>("");
 
   // Refs
   const mapRef = useRef<HTMLDivElement>(null);
@@ -595,6 +597,14 @@ const Home: React.FC = () => {
     }, 1500);
   }, []);
 
+  // Fetch IP address on mount
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => setIpAddress(data.ip))
+      .catch(() => setIpAddress("Unavailable"));
+  }, []);
+
   // Filter change handler
   const handleFilterChange = useCallback((filter: string) => {
     setActiveFilter(filter);
@@ -706,41 +716,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </header>
-
-      {/* Geolocation API Showcase */}
-      <div className="bg-blue-900 text-white p-2 rounded mb-2">
-        <strong>Geolocation API:</strong>
-        {userLocation ? (
-          <>
-            {" "}
-            Your location: {userLocation[0].toFixed(4)},{" "}
-            {userLocation[1].toFixed(4)}
-          </>
-        ) : (
-          <> Location not available or denied.</>
-        )}
-      </div>
-
-      {/* Canvas API Showcase */}
-      <div className="bg-green-900 text-white p-2 rounded mb-2">
-        <strong>Canvas API:</strong> Animated marker and funding progress are
-        rendered on the map using the Canvas API.
-      </div>
-
-      {/* Intersection Observer API Showcase */}
-      <div className="bg-yellow-900 text-white p-2 rounded mb-2">
-        <strong>Intersection Observer API:</strong> Deal cards are highlighted
-        as you scroll. Scroll the list below to see the effect.
-      </div>
-
-      {/* Network Information API Showcase */}
-      {networkInfo.effectiveType && (
-        <div className="bg-gray-800 text-white text-center p-2 text-sm rounded mb-4">
-          <strong>Network Information API:</strong> Type:{" "}
-          {networkInfo.type || "N/A"}, Effective Type:{" "}
-          {networkInfo.effectiveType}, Downlink: {networkInfo.downlink} Mbps
-        </div>
-      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -1124,6 +1099,11 @@ const Home: React.FC = () => {
               * All data displayed is dummy/simulated content for demonstration
               purposes only
             </p>
+          </div>
+          <div className="mt-8 text-xs text-gray-400 text-center">
+            {ipAddress && <span>Your IP: {ipAddress} | </span>}
+            Network: {networkInfo.effectiveType || "N/A"} (
+            {networkInfo.downlink || "N/A"} Mbps)
           </div>
         </div>
       </footer>
