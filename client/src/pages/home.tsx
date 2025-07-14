@@ -599,9 +599,9 @@ const Home: React.FC = () => {
 
   // Fetch IP address on mount
   useEffect(() => {
-    fetch("https://api64.ipify.org?format=json")
-      .then((res) => res.json())
-      .then((data) => setIpAddress(data.ip))
+    fetch("https://api.ipify.org?format=json")
+      .then(res => res.json())
+      .then(data => setIpAddress(data.ip))
       .catch(() => setIpAddress("Unavailable"));
   }, []);
 
