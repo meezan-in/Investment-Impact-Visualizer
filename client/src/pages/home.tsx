@@ -1100,9 +1100,16 @@ const Home: React.FC = () => {
               purposes only
             </p>
           </div>
+          {/* In the footer, update the network info display */}
           <div className="mt-8 text-xs text-gray-400 text-center">
             {ipAddress && <span>Your IP: {ipAddress} | </span>}
-            Network: {networkInfo.effectiveType || "N/A"} (
+            Network:{" "}
+            {networkInfo.type === "wifi"
+              ? "WiFi"
+              : networkInfo.type === "cellular"
+              ? "Cellular"
+              : "Unknown"}{" "}
+            ({networkInfo.effectiveType || "N/A"},{" "}
             {networkInfo.downlink || "N/A"} Mbps)
           </div>
         </div>
